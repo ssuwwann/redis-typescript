@@ -1,6 +1,12 @@
+import MainList from '../components/main/MainList.tsx';
+import Searchbar from '../components/main/Searchbar.tsx';
+
 const Home = () => {
   return (
-    <><h3>홈페이지</h3></>
+    <>
+      <Searchbar />
+      <MainList />
+    </>
   );
 };
 
