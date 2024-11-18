@@ -19,13 +19,15 @@ const MainWrapper = styled.div`
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <MainContainer>
+    <>
       <Header />
-      <MainWrapper>
-        {children}
-      </MainWrapper>
-      <Footer />
-    </MainContainer>
+      <MainContainer>
+        <MainWrapper>
+          {children}
+        </MainWrapper>
+        <Footer />
+      </MainContainer>
+    </>
   );
 };
 

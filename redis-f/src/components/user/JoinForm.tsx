@@ -9,21 +9,23 @@ import {
   StyledButton
 } from '../../assets/css/CommonStyle.tsx';
 
-interface LoginFormProps {
+interface JoinFormProps {
   formData: {
-    email: string,
-    password: string
+    email: string;
+    password: string;
+    username: string;
+    address: string;
   };
 
   handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
 }
 
-const LoginForm: FC<LoginFormProps> = ({ formData, handleChange, handleSubmit }) => {
+const JoinForm: FC<JoinFormProps> = ({ formData, handleChange, handleSubmit }) => {
   return (
     <FormContainer>
       <FormWrapper onSubmit={handleSubmit}>
-        <FormTitle>로그인</FormTitle>
+        <FormTitle>회원가입</FormTitle>
 
         <InputGroup>
           <Label htmlFor="email">이메일</Label>
@@ -51,10 +53,36 @@ const LoginForm: FC<LoginFormProps> = ({ formData, handleChange, handleSubmit })
           />
         </InputGroup>
 
-        <StyledButton $color="$blue" style={{ width: '100%' }}>로그인</StyledButton>
+        <InputGroup>
+          <Label htmlFor="username">이름</Label>
+          <Input
+            id="username"
+            type="text"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+            placeholder="이름을 입력하세요"
+            required
+          />
+        </InputGroup>
+
+        <InputGroup>
+          <Label htmlFor="address">주소</Label>
+          <Input
+            id="address"
+            type="text"
+            name="address"
+            value={formData.address}
+            onChange={handleChange}
+            placeholder="주소를 입력하세요"
+            required
+          />
+        </InputGroup>
+
+        <StyledButton $color="$blue" style={{ width: '100%' }}>가입하기</StyledButton>
       </FormWrapper>
     </FormContainer>
   );
 };
 
-export default LoginForm;
+export default JoinForm;

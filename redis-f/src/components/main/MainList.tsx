@@ -90,6 +90,7 @@ const DeliveryInfo = styled.div`
 
 interface Product {
   id: number;
+  category: string;
   image: string;
   title: string;
   originalPrice: number;
@@ -103,6 +104,7 @@ const MainList = () => {
   const products: Product[] = [
     {
       id: 1,
+      category: '식품',
       image: vite,
       title: '미래생활 순수PURE전 연필프 25m 30롤',
       originalPrice: 35900,
@@ -112,6 +114,7 @@ const MainList = () => {
       delivery: '무료배송'
     }, {
       id: 2,
+      category: '식품',
       image: vite,
       title: '미래생활 순수PURE전 연필프 25m 30롤',
       originalPrice: 35900,
@@ -121,6 +124,7 @@ const MainList = () => {
       delivery: '무료배송'
     }, {
       id: 3,
+      category: '식품',
       image: vite,
       title: '미래생활 순수PURE전 연필프 25m 30롤',
       originalPrice: 35900,
