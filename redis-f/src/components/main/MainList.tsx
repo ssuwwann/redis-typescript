@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import vite from '/vite.svg';
+import { Link } from 'react-router-dom';
 
 // 카드 리스트 컨테이너
 const ListContainer = styled.div`
@@ -17,8 +18,10 @@ const ListContainer = styled.div`
     }
 `;
 
-// 개별 카드 스타일
-const Card = styled.div`
+const CardLink = styled(Link)`
+    text-decoration: none;
+    color: inherit;
+    display: block;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     padding: 15px;
@@ -138,7 +141,7 @@ const MainList = () => {
   return (
     <ListContainer>
       {products.map(product => (
-        <Card key={product.id}>
+        <CardLink key={product.id} to={`/products/${product.id}`}>
           {product.isSpecialPrice && <SpecialPrice>주말특가</SpecialPrice>}
           <ProductImage src={product.image} alt={product.title} />
           <ProductTitle>{product.title}</ProductTitle>
@@ -148,7 +151,7 @@ const MainList = () => {
             <OriginalPrice>{product.originalPrice.toLocaleString()}원</OriginalPrice>
           </PriceInfo>
           {product.delivery && <DeliveryInfo>{product.delivery}</DeliveryInfo>}
-        </Card>
+        </CardLink>
       ))}
     </ListContainer>
   );

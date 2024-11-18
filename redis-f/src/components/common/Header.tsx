@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { StyledLink } from '../../assets/css/CommonStyle.tsx';
+import { StyledLink } from '../../assets/css/CommonUserStyle.tsx';
 
 const HeaderContainer = styled.header`
     height: 75px;

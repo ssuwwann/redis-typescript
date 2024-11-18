@@ -7,7 +7,7 @@ import {
   InputGroup,
   Label,
   StyledButton
-} from '../../assets/css/CommonStyle.tsx';
+} from '../../assets/css/CommonUserStyle.tsx';
 
 interface LoginFormProps {
   formData: {

@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, FormEvent } from 'react';
+import { ChangeEvent, FC, FormEvent, useState } from 'react';
 import {
   FormContainer,
   FormTitle,
@@ -7,7 +7,13 @@ import {
   InputGroup,
   Label,
   StyledButton
-} from '../../assets/css/CommonStyle.tsx';
+} from '../../assets/css/CommonUserStyle.tsx';
+import {
+  ModalContent,
+  ModalHeader,
+  ModalOverlay
+} from '../../assets/css/CommonModalStyle.tsx';
+import DaumPostcodeEmbed from 'react-daum-postcode';
 
 interface JoinFormProps {
   formData: {
@@ -22,6 +28,33 @@ interface JoinFormProps {
 }
 
 const JoinForm: FC<JoinFormProps> = ({ formData, handleChange, handleSubmit }) => {
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+
+  const handleComplete = (data: any) => {
+    let fullAddress = data.address;
+    let extraAddress = '';
+
+    if (data.addressType === 'R') {
+      if (data.bname !== '') {
+        extraAddress += data.bname;
+      }
+      if (data.buildingName !== '') {
+        extraAddress += extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName;
+      }
+      fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
+    }
+
+    const event = {
+      target: {
+        name: 'address',
+        value: fullAddress
+      }
+    } as ChangeEvent<HTMLInputElement>;
+
+    handleChange(event);
+    setIsAddressModalOpen(false);
+  };
+
   return (
     <FormContainer>
       <FormWrapper onSubmit={handleSubmit}>
@@ -75,12 +108,24 @@ const JoinForm: FC<JoinFormProps> = ({ formData, handleChange, handleSubmit }) =
             value={formData.address}
             onChange={handleChange}
             placeholder="주소를 입력하세요"
+            readOnly
             required
+            onClick={() => setIsAddressModalOpen(true)}
           />
         </InputGroup>
 
         <StyledButton $color="$blue" style={{ width: '100%' }}>가입하기</StyledButton>
       </FormWrapper>
+
+      {isAddressModalOpen && (
+        <ModalOverlay onClick={() => setIsAddressModalOpen(false)}>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
+            <ModalHeader>
+              <DaumPostcodeEmbed onComplete={handleComplete} />
+            </ModalHeader>
+          </ModalContent>
+        </ModalOverlay>
+      )}
     </FormContainer>
   );
 };
