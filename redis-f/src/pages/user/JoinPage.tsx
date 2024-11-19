@@ -1,5 +1,6 @@
 import JoinForm from '../../components/user/JoinForm.tsx';
 import { ChangeEvent, FormEvent, useState } from 'react';
+import { join } from '../../api/user.ts';
 
 interface JoinFormData {
   email: string;
@@ -27,10 +28,13 @@ const JoinPage = () => {
     }));
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     console.log('form submitted', formData);
+
+    const result = await join(formData);
+    console.log('회원가입 결과', result);
   };
 
   return (

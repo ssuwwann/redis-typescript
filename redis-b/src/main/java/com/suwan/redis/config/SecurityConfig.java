@@ -21,7 +21,8 @@ public class SecurityConfig {
     http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
     http.formLogin(formLogin -> formLogin.disable());
     http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
+    http.httpBasic(basic -> basic.disable());
+    
     http.authorizeHttpRequests(auth -> auth
             .anyRequest().permitAll());
 

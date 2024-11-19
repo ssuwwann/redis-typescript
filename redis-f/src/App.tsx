@@ -7,6 +7,7 @@ const MainLayout = lazy(() => import('./Layout/MainLayout.tsx'));
 const LoginPage = lazy(() => import('./pages/user/LoginPage.tsx'));
 const HomePage = lazy(() => import('./pages/Home.tsx'));
 const JoinPage = lazy(() => import('./pages/user/JoinPage.tsx'));
+const ProductPage = lazy(() => import('./pages/product/ProductPage.tsx'));
 
 const GlobalStyle = createGlobalStyle`
     ${reset}
@@ -41,8 +42,14 @@ function PageRoutes() {
               <HomePage />
             </Suspense>}
           />
+
+          <Route path="/products/:id" element={
+            <Suspense fallback={<h3>Loading ...</h3>}>
+              <ProductPage />
+            </Suspense>
+          } />
         </Route>
-        
+
         <Route path="/login" element={
           <Suspense fallback={<h3>Loading ...</h3>}>
             <LoginPage />

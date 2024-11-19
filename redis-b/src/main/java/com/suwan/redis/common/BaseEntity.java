@@ -31,15 +31,14 @@ public abstract class BaseEntity {
   private LocalDateTime updatedAt;
 
   @Comment("작성자")
-  @Column(nullable = false)
   @CreatedBy
-  private String writer;
+  private Long writer;
 
   @Comment("작성자")
   @LastModifiedBy
-  private String updater;
+  private Long updater;
 
   @Comment("0 = 활동, 1 = 삭제")
-  @Column(nullable = false)
+  @Column(nullable = false, columnDefinition = "boolean default false")
   private boolean isDeleted = false;
 }

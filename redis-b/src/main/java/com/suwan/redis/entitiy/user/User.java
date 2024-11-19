@@ -3,16 +3,18 @@ package com.suwan.redis.entitiy.user;
 import com.suwan.redis.common.BaseEntity;
 import com.suwan.redis.entitiy.cart.Cart;
 import com.suwan.redis.entitiy.payment.Payment;
-import com.suwan.redis.entitiy.product.Product;
+import com.suwan.redis.entitiy.user.dto.UserRequest;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 import org.hibernate.annotations.Comment;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Getter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class User extends BaseEntity {
 
   @Id
@@ -27,7 +29,7 @@ public class User extends BaseEntity {
   private List<Payment> payments = new ArrayList<>();
 
   @Comment("로그인 ID")
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   private String email;
 
   @Column(nullable = false)
@@ -39,10 +41,24 @@ public class User extends BaseEntity {
   @Column(nullable = false)
   private String address;
 
-  @Column(nullable = false)
   private String profileImage;
 
   @Enumerated(EnumType.STRING)
   private Role role;
+
+  public static User from(UserRequest dto, Cart cart) {
+    return User.builder()
+            .cart(cart)
+            .email(dto.email())
+            .password(dto.password())
+            .username(dto.username())
+            .address(dto.address())
+            .role(Role.BU)
+            .build();
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
 }
