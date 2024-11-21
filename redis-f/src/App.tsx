@@ -2,6 +2,7 @@ import { reset } from 'styled-reset';
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
+import { AuthProvider } from './utils/AuthContext.tsx';
 
 const MainLayout = lazy(() => import('./Layout/MainLayout.tsx'));
 const LoginPage = lazy(() => import('./pages/user/LoginPage.tsx'));
@@ -20,7 +21,9 @@ const GlobalStyle = createGlobalStyle`
 function App() {
   return (
     <BrowserRouter>
-      <PageRoutes />
+      <AuthProvider>
+        <PageRoutes />
+      </AuthProvider>
     </BrowserRouter>
   );
 }

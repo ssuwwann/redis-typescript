@@ -1,4 +1,4 @@
-import { publicApi } from './axios.ts';
+import { privateApi, publicApi } from './axios.ts';
 
 interface JoinRequestData {
   email: string;
@@ -19,5 +19,12 @@ export const join = async (data: JoinRequestData): Promise<any> => {
 
 export const login = async (data: LoginRequestData): Promise<any> => {
   const response = await publicApi.post(`${import.meta.env.VITE_BASE_URL}/login`, data);
+  return response;
+};
+
+export const getRole = async (accessToken: string): Promise<any> => {
+  const response = await privateApi.post(`${import.meta.env.VITE_BASE_URL}/users/roles`, null, {
+    headers: { 'Authorization': accessToken }
+  });
   return response.data;
 };

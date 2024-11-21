@@ -1,5 +1,8 @@
 import LoginForm from '../../components/user/LoginForm.tsx';
 import { ChangeEvent, FormEvent, useState } from 'react';
+import { getRole, login } from '../../api/user.ts';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../utils/AuthContext.tsx';
 
 interface LoginFormData {
   email: string;
@@ -13,6 +16,9 @@ const initLoginForm: LoginFormData = {
 
 const LoginPage = () => {
   const [formData, setFormData] = useState<LoginFormData>(initLoginForm);
+  const { setAuthState } = useAuth();
+
+  const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -23,10 +29,21 @@ const LoginPage = () => {
     }));
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log('login form data', formData);
+    try {
+      const result = await login(formData);
+      const accessToken = result.headers['authorization'];
+      const role = await getRole(accessToken);
+
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('username', result.data.username); // username 저장 추가
+      setAuthState(result.data, role);
+      navigate('/');
+    } catch (error) {
+      console.error('로그인 실패:', error);
+    }
   };
 
   return (
