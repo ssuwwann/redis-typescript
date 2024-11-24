@@ -26,14 +26,19 @@ public class JwtFilter extends OncePerRequestFilter {
   private final UserDetailsService userDetailsService;
 
   @Override
+  protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    String requestURI = request.getRequestURI();
+    if (requestURI.startsWith("/logout")) return true;
+    return false;
+  }
+
+  @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
     String authorization = request.getHeader("Authorization");
     String accessToken = "";
     if (authorization != null && authorization.startsWith("Bearer ")) {
       accessToken = authorization.substring(7);
     }
-
-    System.out.println(accessToken);
 
     if (accessToken.isBlank()) {
       filterChain.doFilter(request, response);

@@ -3,12 +3,16 @@ package com.suwan.redis.jwt;
 import com.suwan.redis.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE refresh r SET r.is_deleted = true where r.id = ?")
+@SQLRestriction("is_deleted = false")
 public class Refresh extends BaseEntity {
 
   @Id

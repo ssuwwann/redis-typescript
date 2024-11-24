@@ -1,5 +1,6 @@
-import { createContext, ReactNode, useContext, useState } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getRole, logout } from '../api/user.ts';
 
 type Role = 'BU' | 'SE' | 'SP' | null;
 
@@ -18,17 +19,43 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const navigate = useNavigate();
 
+  const getUserRole = async (): Promise<any> => {
+    const accessToken = localStorage.getItem('accessToken');
+
+    if (!accessToken) throw new Error('No access token found');
+
+    try {
+      const result = await getRole(accessToken);
+      setRole(result);
+    } catch (error) {
+      console.error(error);
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('username');
+    }
+  };
+
+  useEffect(() => {
+    getUserRole();
+    setUsername(localStorage.getItem('username'));
+  }, []);
+
   const setAuthState = (username: string, role: Role) => {
+    localStorage.setItem('username', username);
     setUsername(username);
     setRole(role);
   };
 
-  const clearAuthState = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('username');
-    setUsername(null);
-    setRole(null);
-    navigate('/');
+  const clearAuthState = async () => {
+    try {
+      await logout();
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('username');
+      setUsername(null);
+      setRole(null);
+      navigate('/');
+    } catch (error) {
+      console.error('로그아웃 에러:', error);
+    }
   };
 
   return (

@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -46,6 +47,7 @@ public class SecurityConfig {
             .anyRequest().permitAll());
 
     http.addFilterAt(new CustomLoginFilter(refreshService, authenticationManager(authenticationConfiguration), objectMapper, jwtUtil, cookies), UsernamePasswordAuthenticationFilter.class);
+    http.addFilterBefore(new CustomLogoutFilter(refreshService, jwtUtil), LogoutFilter.class);
     http.addFilterBefore(new JwtFilter(cookies, jwtUtil, userDetailsService), CustomLoginFilter.class);
     return http.build();
   }

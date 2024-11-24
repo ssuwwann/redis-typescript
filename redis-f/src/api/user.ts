@@ -22,6 +22,11 @@ export const login = async (data: LoginRequestData): Promise<any> => {
   return response;
 };
 
+export const logout = async (): Promise<any> => {
+  const response = await privateApi.post(`${import.meta.env.VITE_BASE_URL}/logout`);
+  return response;
+};
+
 export const getRole = async (accessToken: string): Promise<any> => {
   const response = await privateApi.post(`${import.meta.env.VITE_BASE_URL}/users/roles`, null, {
     headers: { 'Authorization': accessToken }

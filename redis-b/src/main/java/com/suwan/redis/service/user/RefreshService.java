@@ -19,6 +19,11 @@ public class RefreshService {
     refreshRepository.save(refresh);
   }
 
+  public String getRefreshToken(String refreshToken) {
+    Refresh refresh = refreshRepository.findByRefreshToken(refreshToken).orElseThrow();
+    return refresh.getRefreshToken();
+  }
+
   public UpdateToken createNewToken(HttpServletRequest request) {
 
     return null;

@@ -13,6 +13,7 @@ const HeaderContainer = styled.header`
 
 const ButtonGroup = styled.div`
     display: flex;
+    align-items: center;
     gap: 10px; // 버튼 사이 간격
     height: 35px;
 `;
@@ -20,7 +21,6 @@ const ButtonGroup = styled.div`
 const Header = () => {
   const { username, clearAuthState } = useAuth();
 
-  console.log('header에서 ', username);
   return (
     <HeaderContainer>
       <ButtonGroup>
