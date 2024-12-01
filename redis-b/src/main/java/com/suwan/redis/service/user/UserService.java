@@ -1,12 +1,16 @@
 package com.suwan.redis.service.user;
 
 import com.suwan.redis.entitiy.cart.Cart;
+import com.suwan.redis.entitiy.user.Role;
 import com.suwan.redis.entitiy.user.User;
+import com.suwan.redis.entitiy.user.dto.CustomUserDetails;
 import com.suwan.redis.entitiy.user.dto.UserRequest;
 import com.suwan.redis.repository.cart.CartRepository;
 import com.suwan.redis.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,4 +38,10 @@ public class UserService {
     return user.getUsername();
   }
 
+  public void registerSeller(Authentication authentication) {
+    CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
+
+    User findUser = userRepository.findById(user.getId()).orElseThrow(() -> new UsernameNotFoundException("없는 유저입니다."));
+    findUser.toSeller();
+  }
 }

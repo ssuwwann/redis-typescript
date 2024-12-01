@@ -20,15 +20,13 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate();
 
   const getUserRole = async (): Promise<any> => {
-    const accessToken = localStorage.getItem('accessToken');
-
-    if (!accessToken) throw new Error('No access token found');
-
     try {
-      const result = await getRole(accessToken);
+      const result = await getRole();
+      setUsername(localStorage.getItem('username'));
       setRole(result);
     } catch (error) {
       console.error(error);
+      setRole(null);
       localStorage.removeItem('accessToken');
       localStorage.removeItem('username');
     }
@@ -36,8 +34,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     getUserRole();
-    setUsername(localStorage.getItem('username'));
-  }, []);
+  }, [username]);
 
   const setAuthState = (username: string, role: Role) => {
     localStorage.setItem('username', username);
@@ -65,7 +62,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const useAuth = () => {
+const useAuth = () => {
   const context = useContext(AuthContext);
 
   if (!context) throw new Error('useAuth must be used within an AuthProvider');
@@ -73,4 +70,4 @@ export const useAuth = () => {
   return context;
 };
 
-export { AuthContext, AuthProvider };
+export { AuthContext, AuthProvider, useAuth };

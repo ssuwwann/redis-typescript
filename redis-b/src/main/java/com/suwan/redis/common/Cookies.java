@@ -24,7 +24,7 @@ public class Cookies {
     Cookie[] cookies = request.getCookies();
     if (cookies != null) {
       for (Cookie cookie : cookies) {
-        if (cookie.getName().startsWith("access") || cookie.getName().startsWith("refresh")) {
+        if (cookie.getName().equals("refreshToken")) {
           Cookie newCookie = new Cookie(cookie.getName(), null);
           newCookie.setMaxAge(0);
           newCookie.setPath("/");

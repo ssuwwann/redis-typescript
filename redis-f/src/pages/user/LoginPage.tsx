@@ -35,10 +35,10 @@ const LoginPage = () => {
     try {
       const result = await login(formData);
       const accessToken = result.headers['authorization'];
-      const role = await getRole(accessToken);
 
       localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('username', result.data.username); // username 저장 추가
+      localStorage.setItem('username', result.username); // username 저장 추가
+      const role = await getRole();
       setAuthState(result.data, role);
       navigate('/');
     } catch (error) {

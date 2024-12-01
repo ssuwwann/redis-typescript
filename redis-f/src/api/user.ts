@@ -13,23 +13,26 @@ interface LoginRequestData {
 }
 
 export const join = async (data: JoinRequestData): Promise<any> => {
-  const response = await publicApi.post(`${import.meta.env.VITE_BASE_URL}/users`, data);
+  const response = await publicApi.post('/users', data);
   return response.data;
 };
 
 export const login = async (data: LoginRequestData): Promise<any> => {
-  const response = await publicApi.post(`${import.meta.env.VITE_BASE_URL}/login`, data);
+  const response = await publicApi.post('/login', data);
   return response;
 };
 
 export const logout = async (): Promise<any> => {
-  const response = await privateApi.post(`${import.meta.env.VITE_BASE_URL}/logout`);
+  const response = await privateApi.post('/logout');
   return response;
 };
 
-export const getRole = async (accessToken: string): Promise<any> => {
-  const response = await privateApi.post(`${import.meta.env.VITE_BASE_URL}/users/roles`, null, {
-    headers: { 'Authorization': accessToken }
-  });
+export const getRole = async (): Promise<any> => {
+  const response = await privateApi.post('/users/roles');
+  return response.data;
+};
+
+export const applySeller = async (): Promise<any> => {
+  const response = await privateApi.get('/users/seller');
   return response.data;
 };

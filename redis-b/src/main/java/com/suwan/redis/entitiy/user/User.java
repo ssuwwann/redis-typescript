@@ -61,4 +61,7 @@ public class User extends BaseEntity {
     this.password = password;
   }
 
+  public void toSeller() {
+    role = Role.SE;
+  }
 }

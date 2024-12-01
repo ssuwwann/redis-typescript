@@ -1,4 +1,4 @@
-package com.suwan.redis.jwt;
+package com.suwan.redis.entitiy.user;
 
 import com.suwan.redis.common.BaseEntity;
 import jakarta.persistence.*;
@@ -34,10 +34,6 @@ public class Refresh extends BaseEntity {
             .refreshToken(refreshToken)
             .expiration(expiration)
             .build();
-  }
-
-  public void deactivate() {
-    this.setDeleted(true);
   }
 
 }

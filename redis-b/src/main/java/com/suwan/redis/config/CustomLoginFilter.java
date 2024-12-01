@@ -2,10 +2,9 @@ package com.suwan.redis.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.suwan.redis.common.Cookies;
-import com.suwan.redis.entitiy.user.User;
 import com.suwan.redis.entitiy.user.dto.CustomUserDetails;
 import com.suwan.redis.jwt.JwtUtil;
-import com.suwan.redis.jwt.Refresh;
+import com.suwan.redis.entitiy.user.Refresh;
 import com.suwan.redis.service.user.RefreshService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -57,17 +56,15 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
     String username = user.getUsername();
 
     Map<String, Object> claims = new HashMap<>();
-    claims.put("id", id);
     claims.put("email", email);
-    claims.put("username", username);
 
-    String accessToken = jwtUtil.createToken("access", claims, 1000 * 60 * 10L); // 10분
+    String accessToken = jwtUtil.createToken("access", claims, 1000 * 60 * 5L);
     String refreshToken = jwtUtil.createToken("refresh", claims, 1000 * 60 * 60 * 24L);
 
     addRefreshEntity(id, refreshToken, 1000 * 60 * 60 * 24L);
 
     response.setHeader("Authorization", "Bearer " + accessToken);
-    response.addCookie(cookies.createCookie("refresh", refreshToken));
+    response.addCookie(cookies.createCookie("refreshToken", refreshToken));
     response.setContentType("application/json; charset=utf-8");
     response.setStatus(HttpServletResponse.SC_OK);
 

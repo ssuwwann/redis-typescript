@@ -28,8 +28,8 @@ public class JwtFilter extends OncePerRequestFilter {
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
     String requestURI = request.getRequestURI();
-    if (requestURI.startsWith("/logout")) return true;
-    return false;
+    return requestURI.equals("/logout") ||
+            requestURI.equals("/auth/refresh");
   }
 
   @Override
@@ -48,6 +48,7 @@ public class JwtFilter extends OncePerRequestFilter {
     try {
       jwtUtil.isExpired(accessToken);
     } catch (ExpiredJwtException eje) {
+      eje.printStackTrace();
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       return;
     }

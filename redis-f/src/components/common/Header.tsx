@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { StyledButton, StyledLink } from '../../assets/css/CommonUserStyle.tsx';
 import { useAuth } from '../../utils/AuthContext.tsx';
+import { applySeller } from '../../api/user.ts';
 
 const HeaderContainer = styled.header`
     height: 75px;
@@ -19,7 +20,14 @@ const ButtonGroup = styled.div`
 `;
 
 const Header = () => {
-  const { username, clearAuthState } = useAuth();
+  const { username, role, setAuthState, clearAuthState } = useAuth();
+
+  const handleClick = async () => {
+    const result = await applySeller();
+    console.log('판매자신청 ' + result);
+
+    setAuthState(username!, result);
+  };
 
   return (
     <HeaderContainer>
@@ -27,6 +35,15 @@ const Header = () => {
         {username ? (
           <>
             <span>{username}님</span>
+            {role === 'BU' ? (
+              <StyledButton $color="$red" onClick={handleClick}>판매자 신청</StyledButton>
+            ) : (
+              <>
+                <StyledButton $color="$blue">판매자 취소</StyledButton>
+                <StyledButton $color="$red">판매 등록</StyledButton>
+              </>
+            )}
+
             <StyledButton onClick={clearAuthState}>로그아웃</StyledButton>
           </>
         ) : (
