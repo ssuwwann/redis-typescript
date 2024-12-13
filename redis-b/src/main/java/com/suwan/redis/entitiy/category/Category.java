@@ -1,11 +1,16 @@
 package com.suwan.redis.entitiy.category;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
+@Getter
 public class Category {
 
   @Id
@@ -22,4 +27,10 @@ public class Category {
   private List<Category> children = new ArrayList<>();
 
   private Integer level;
+
+  @PrePersist
+  public void prePersist() {
+    if (this.level == null) this.level = this.parent == null ? 1 : this.parent.getLevel() + 1;
+  }
+
 }
