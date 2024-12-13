@@ -6,13 +6,13 @@ import {
   Input,
   InputGroup,
   Label,
-  StyledButton
-} from '../../assets/css/CommonUserStyle.tsx';
+  StyledButton,
+} from '../../assets/css/userStyle.ts';
 import {
   ModalContent,
   ModalHeader,
-  ModalOverlay
-} from '../../assets/css/CommonModalStyle.tsx';
+  ModalOverlay,
+} from '../../assets/css/CommonModalStyle.ts';
 import DaumPostcodeEmbed from 'react-daum-postcode';
 
 interface JoinFormProps {
@@ -47,8 +47,8 @@ const JoinForm: FC<JoinFormProps> = ({ formData, handleChange, handleSubmit }) =
     const event = {
       target: {
         name: 'address',
-        value: fullAddress
-      }
+        value: fullAddress,
+      },
     } as ChangeEvent<HTMLInputElement>;
 
     handleChange(event);

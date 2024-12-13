@@ -14,6 +14,7 @@ const MainWrapper = styled.div`
     flex: 1;
     padding-bottom: 150px;
     max-width: 1000px;
+    width: 100%;
     margin: 0 auto;
 `;
 

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { StyledButton, StyledLink } from '../../assets/css/CommonUserStyle.tsx';
+import { StyledButton, StyledLink } from '../../assets/css/userStyle.ts';
 import { useAuth } from '../../utils/AuthContext.tsx';
 import { applySeller } from '../../api/user.ts';
 
@@ -24,8 +24,6 @@ const Header = () => {
 
   const handleClick = async () => {
     const result = await applySeller();
-    console.log('판매자신청 ' + result);
-
     setAuthState(username!, result);
   };
 
@@ -39,8 +37,8 @@ const Header = () => {
               <StyledButton $color="$red" onClick={handleClick}>판매자 신청</StyledButton>
             ) : (
               <>
+                <StyledLink to="/products/register" $color="$red">판매 등록</StyledLink>
                 <StyledButton $color="$blue">판매자 취소</StyledButton>
-                <StyledButton $color="$red">판매 등록</StyledButton>
               </>
             )}
 

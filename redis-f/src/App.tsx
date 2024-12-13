@@ -3,16 +3,18 @@ import { lazy, Suspense } from 'react';
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import { AuthProvider } from './utils/AuthContext.tsx';
+import ProtectedRoute from './utils/ProtectedRoute.tsx';
 
 const MainLayout = lazy(() => import('./Layout/MainLayout.tsx'));
 const LoginPage = lazy(() => import('./pages/user/LoginPage.tsx'));
 const HomePage = lazy(() => import('./pages/Home.tsx'));
 const JoinPage = lazy(() => import('./pages/user/JoinPage.tsx'));
-const ProductPage = lazy(() => import('./pages/product/ProductPage.tsx'));
+const ProductDetailPage = lazy(() => import('./pages/product/ProductDetailPage.tsx'));
+const ProductRegisterPage = lazy(() => import('./pages/product/ProductRegisterPage.tsx'));
 
 const GlobalStyle = createGlobalStyle`
     ${reset}
-    html, body {
+    * {
         margin: 0;
         box-sizing: border-box;
     }
@@ -46,9 +48,17 @@ function PageRoutes() {
             </Suspense>}
           />
 
+          <Route path="/products/register" element={
+            <Suspense fallback={<h3>Loading ...</h3>}>
+              <ProtectedRoute requiredRole="SE">
+                <ProductRegisterPage />
+              </ProtectedRoute>
+            </Suspense>
+          } />
+
           <Route path="/products/:id" element={
             <Suspense fallback={<h3>Loading ...</h3>}>
-              <ProductPage />
+              <ProductDetailPage />
             </Suspense>
           } />
         </Route>

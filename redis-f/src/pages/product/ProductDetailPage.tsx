@@ -1,15 +1,15 @@
 import ProductImage from '../../components/product/ProductImage.tsx';
 import ProductInfo from '../../components/product/ProductInfo.tsx';
-import ProductDesc from '../../components/product/ProductDesc.tsx';
+import ProductCategory from '../../components/product/ProductCategory.tsx';
 
-const ProductPage = () => {
+const ProductDetailPage = () => {
   return (
     <>
       <ProductImage />
       <ProductInfo />
-      <ProductDesc />
+      <ProductCategory />
     </>
   );
 };
 
-export default ProductPage;
+export default ProductDetailPage;
