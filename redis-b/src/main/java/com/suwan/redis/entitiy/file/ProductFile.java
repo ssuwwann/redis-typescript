@@ -1,17 +1,15 @@
 package com.suwan.redis.entitiy.file;
 
 import com.suwan.redis.common.BaseEntity;
+import com.suwan.redis.entitiy.file.dto.FileInfomation;
 import com.suwan.redis.entitiy.product.Product;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
+import lombok.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Getter
 @Builder
 public class ProductFile extends BaseEntity {
 
@@ -43,32 +41,30 @@ public class ProductFile extends BaseEntity {
 
   private Integer displayOrder;
 
-  // 상품 이미지 생성
-  public static ProductFile of(Product product, String originalFilename, String savedPath, String savedFilename, String extension, Long fileSize, Integer displayOrder) {
-    ProductFile file = new ProductFile();
-    file.product = product;
-    file.originalFilename = originalFilename;
-    file.savedFilename = savedFilename;
-    file.savedPath = savedPath;
-    file.extension = extension;
-    file.fileType = FileType.PRODUCT_IMAGE;
-    file.fileSize = fileSize;
-    file.displayOrder = displayOrder;
-    return file;
+  public static ProductFile createProductImage(Product product, FileInfomation FileInfomation, Integer displayOrder) {
+    return ProductFile.builder()
+            .product(product)
+            .originalFilename(FileInfomation.getOriginalFilename())
+            .savedFilename(FileInfomation.getSavedFilename())
+            .savedPath(FileInfomation.getSavedPath())
+            .extension(FileInfomation.getExtension())
+            .fileType(FileType.PRODUCT_IMAGE)
+            .fileSize(FileInfomation.getFileSize())
+            .displayOrder(displayOrder)
+            .build();
   }
 
-  // 상품 설명 이미지 생성
-  public static ProductFile of(Product product, String originalFilename, String savedPath, String savedFilename, String extension, Long fileSize) {
-    ProductFile file = new ProductFile();
-    file.product = product;
-    file.originalFilename = originalFilename;
-    file.savedFilename = savedFilename;
-    file.savedPath = savedPath;
-    file.extension = extension;
-    file.fileType = FileType.DESCRIPTION_IMAGE;
-    file.fileSize = fileSize;
-    file.displayOrder = null;  // 설명 이미지는 순서가 필요 없음
-    return file;
+  public static ProductFile createDescriptionImage(Product product, FileInfomation FileInfomation) {
+    return ProductFile.builder()
+            .product(product)
+            .originalFilename(FileInfomation.getOriginalFilename())
+            .savedFilename(FileInfomation.getSavedFilename())
+            .savedPath(FileInfomation.getSavedPath())
+            .extension(FileInfomation.getExtension())
+            .fileType(FileType.DESCRIPTION_IMAGE)
+            .fileSize(FileInfomation.getFileSize())
+            .displayOrder(null)
+            .build();
   }
 
 }

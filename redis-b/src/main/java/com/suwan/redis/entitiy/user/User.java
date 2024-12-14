@@ -46,7 +46,7 @@ public class User extends BaseEntity {
   @Enumerated(EnumType.STRING)
   private Role role;
 
-  public static User from(UserRequest dto, Cart cart) {
+  public static User of(UserRequest dto, Cart cart) {
     return User.builder()
             .cart(cart)
             .email(dto.email())

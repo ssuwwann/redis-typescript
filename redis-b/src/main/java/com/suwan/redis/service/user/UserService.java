@@ -27,7 +27,7 @@ public class UserService {
 
   public String saveUser(UserRequest dto) {
     Cart cart = cartRepository.save(Cart.createEmpty());
-    User user = userRepository.save(User.from(dto, cart));
+    User user = userRepository.save(User.of(dto, cart));
     user.setPassword(passwordEncoder.encode(user.getPassword()));
 
     cart.setWriter(user.getId());

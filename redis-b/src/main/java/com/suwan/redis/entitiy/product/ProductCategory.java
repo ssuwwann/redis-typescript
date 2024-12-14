@@ -20,7 +20,7 @@ public class ProductCategory extends BaseEntity {
   @JoinColumn(name = "product_id")
   private Product product;
 
-  @ManyToOne(fetch = FetchType.LAZY)  // @OneToMany가 아닌 @ManyToOne 사용
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "category_id")
   private Category category;
 

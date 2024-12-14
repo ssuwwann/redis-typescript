@@ -1,16 +1,13 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { ProductFormData, ProductImageData } from '../../type/product.ts';
+import { ProductFormDataWithDesc, ProductImageData } from '../../type/product.ts';
 import { Button, PageContainer } from '../../assets/css/productStyle.ts';
 import ProductImage from '../../components/product/ProductImage.tsx';
 import ProductCategory from '../../components/product/ProductCategory.tsx';
 import ProductInfo from '../../components/product/ProductInfo.tsx';
+import { saveProduct } from '../../api/product.ts';
 
-interface ProductFormDataWithDesc extends ProductFormData {
-  descriptionImage: ProductImageData | null;
-}
-
-export const initProductFormData: ProductFormDataWithDesc = {
-  category: [],
+const initProductFormData: ProductFormDataWithDesc = {
+  category: '',
   title: '',
   description: '',
   originalPrice: 0,
@@ -20,6 +17,7 @@ export const initProductFormData: ProductFormDataWithDesc = {
   freeDelivery: false,
   quantity: 0,
   descriptionImage: null,
+  productImages: [],
 };
 
 export default function ProductRegisterPage() {
@@ -47,7 +45,7 @@ export default function ProductRegisterPage() {
     });
   };
 
-  const handleCategoryChange = (category: string[]) => {
+  const handleCategoryChange = (category: string) => {
     setFormData(prev => ({ ...prev, category: category }));
   };
 
@@ -63,10 +61,34 @@ export default function ProductRegisterPage() {
     setFormData(prev => ({ ...prev, descriptionImage: image }));
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    console.log('submit form data:', formData, images);
-    // 여기서 상품 등록 그거 ..!
+
+    const newFormData = new FormData();
+
+    newFormData.append('category', formData.category);
+    newFormData.append('title', formData.title);
+    newFormData.append('description', formData.description);
+    newFormData.append('originalPrice', String(formData.originalPrice));
+    newFormData.append('discountRate', String(formData.discountRate));
+    newFormData.append('currentPrice', String(formData.currentPrice));
+    newFormData.append('isSpecialPrice', String(formData.isSpecialPrice));
+    newFormData.append('freeDelivery', String(formData.freeDelivery));
+    newFormData.append('quantity', String(formData.quantity));
+
+    if (formData.descriptionImage?.file) newFormData.append('descriptionImage', formData.descriptionImage.file);
+
+    if (images.length > 0) {
+      images.forEach(image => {
+        if (image.file) newFormData.append('productImages', image.file);
+      });
+    }
+
+    try {
+      await saveProduct(newFormData);
+    } catch (error) {
+      console.error('Failed to save product', error);
+    }
   };
 
   const handleModal = (flag: boolean) => {

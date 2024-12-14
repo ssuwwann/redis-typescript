@@ -2,9 +2,11 @@ package com.suwan.redis.entitiy.product;
 
 import com.suwan.redis.common.BaseEntity;
 import com.suwan.redis.entitiy.category.Category;
-import com.suwan.redis.entitiy.file.ProductFile;
-import com.suwan.redis.entitiy.payment.PaymentStatus;
 import com.suwan.redis.entitiy.product.dto.ProductRequest;
+import com.suwan.redis.entitiy.product.vo.ProductBasicInfo;
+import com.suwan.redis.entitiy.product.vo.ProductImages;
+import com.suwan.redis.entitiy.product.vo.ProductInventory;
+import com.suwan.redis.entitiy.product.vo.ProductPriceInfo;
 import com.suwan.redis.entitiy.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,57 +27,56 @@ public class Product extends BaseEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "SELLER_ID", nullable = false)
-  private User user;
+  private User seller;
+
+  @Embedded
+  private ProductBasicInfo basicInfo;
+
+  @Embedded
+  private ProductPriceInfo priceInfo;
+
+  @Embedded
+  private ProductInventory inventory;
+
+  @Embedded
+  private ProductImages productImages;
 
   @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Builder.Default
   private List<ProductCategory> categories = new ArrayList<>();
 
-  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-  private List<ProductFile> productFile;
+  public static Product create(User seller, ProductRequest request, List<Category> categories) {
+    Product product = Product.builder()
+            .seller(seller)
+            .basicInfo(ProductBasicInfo.of(
+                    request.getTitle(),
+                    request.getDescription()))
+            .priceInfo(ProductPriceInfo.of(
+                    request.getOriginalPrice(),
+                    request.getDiscountRate(),
+                    request.getCurrentPrice(),
+                    request.isSpecialPrice(),
+                    request.isFreeDelivery()))
+            .inventory(ProductInventory.from(request.getQuantity()))
+            .build();
 
-  @Column(nullable = false)
-  private String title;
+    product.addCategories(categories);
 
-  @Column(nullable = false)
-  private String description;
-
-  @Column(nullable = false)
-  private Double originalPrice;
-
-  @Column(nullable = false)
-  private Integer discountRate;
-
-  @Column(nullable = false)
-  private Double currentPrice;
-
-  @Column(nullable = false)
-  private boolean isSpecialPrice;
-
-  @Column(nullable = false)
-  private boolean freeDelivery;
-
-  @Column(nullable = false)
-  private String image;
-
-  @Column(nullable = false)
-  private Integer quantity;
-
-  public void addCategory(List<Category> categories) {
-    categories.forEach(category -> this.categories.add(ProductCategory.of(this, category)));
+    return product;
   }
 
-  public static Product from(User seller, ProductRequest request) {
-    return Product.builder()
-            .user(seller)
-            .title(request.getTitle())
-            .description(request.getDescription())
-            .originalPrice(request.getOriginalPrice())
-            .discountRate(request.getDiscountRate())
-            .currentPrice(request.getCurrentPrice())
-            .isSpecialPrice(request.isSpecialPrice())
-            .freeDelivery(request.isFreeDelivery())
-            .quantity(request.getQuantity())
-            .build();
+  private void addCategories(List<Category> categories) {
+    categories.forEach(category -> {
+      this.categories.add(ProductCategory.of(this, category));
+    });
+  }
+
+  public void validateProduct() {
+    boolean hasDescription = basicInfo.getDescription() != null && !basicInfo.getDescription().isBlank();
+    boolean hasDescriptionProductImage = productImages != null && productImages.hasDescriptionImage();
+
+    if (!hasDescription && !hasDescriptionProductImage)
+      throw new IllegalArgumentException("상품 설명 또는 상품 설명 이미지 중 하나는 필수입니다.");
   }
 
 }

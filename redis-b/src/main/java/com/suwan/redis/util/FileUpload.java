@@ -1,5 +1,6 @@
 package com.suwan.redis.util;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Component
 public class FileUpload {
 
   private static final String BASE_PATH = "C:/redis";

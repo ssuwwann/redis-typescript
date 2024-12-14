@@ -15,7 +15,7 @@ const SelectedCategoryText = styled.div`
 
 interface CategorySelectProps {
   isModalOpen: boolean;
-  onChange: (value: string[]) => void;
+  onChange: (value: string) => void;
   handleModal: (flag: boolean) => void;
 }
 
@@ -44,8 +44,8 @@ export default function ProductCategory({
   };
 
   const handleSecondarySelect = (secondaryCategory: string) => {
-    const newCategories = [selectedPrimary, secondaryCategory];
-    setSelectedCategories(newCategories);
+    const newCategories = `${selectedPrimary}, ${secondaryCategory}`;
+    setSelectedCategories([selectedPrimary, secondaryCategory]);
     onChange(newCategories);
     handleModal(false);
   };
