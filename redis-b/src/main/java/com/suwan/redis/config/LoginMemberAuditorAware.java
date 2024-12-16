@@ -1,7 +1,6 @@
 package com.suwan.redis.config;
 
-import com.suwan.redis.entitiy.user.User;
-import com.suwan.redis.entitiy.user.dto.CustomUserDetails;
+import com.suwan.redis.domain.user.dto.CustomUserDetails;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

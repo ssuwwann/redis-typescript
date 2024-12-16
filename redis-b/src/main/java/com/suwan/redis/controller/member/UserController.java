@@ -1,11 +1,10 @@
 package com.suwan.redis.controller.member;
 
-import com.suwan.redis.entitiy.user.dto.CustomUserDetails;
-import com.suwan.redis.entitiy.user.dto.UserRequest;
+import com.suwan.redis.domain.user.dto.CustomUserDetails;
+import com.suwan.redis.domain.user.dto.UserRequest;
 import com.suwan.redis.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;

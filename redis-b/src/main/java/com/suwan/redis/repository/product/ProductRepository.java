@@ -1,6 +1,6 @@
 package com.suwan.redis.repository.product;
 
-import com.suwan.redis.entitiy.product.Product;
+import com.suwan.redis.domain.product.entitiy.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

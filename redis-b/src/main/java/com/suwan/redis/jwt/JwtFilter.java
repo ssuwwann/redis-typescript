@@ -1,7 +1,7 @@
 package com.suwan.redis.jwt;
 
 import com.suwan.redis.common.Cookies;
-import com.suwan.redis.entitiy.user.dto.CustomUserDetails;
+import com.suwan.redis.domain.user.dto.CustomUserDetails;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

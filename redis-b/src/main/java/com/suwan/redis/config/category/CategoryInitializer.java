@@ -1,6 +1,6 @@
 package com.suwan.redis.config.category;
 
-import com.suwan.redis.entitiy.category.Category;
+import com.suwan.redis.domain.category.Category;
 import com.suwan.redis.repository.category.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;

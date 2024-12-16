@@ -1,19 +1,17 @@
 package com.suwan.redis.service.user;
 
-import com.suwan.redis.entitiy.user.User;
-import com.suwan.redis.entitiy.user.dto.UpdateToken;
-import com.suwan.redis.entitiy.user.Refresh;
+import com.suwan.redis.domain.user.entity.User;
+import com.suwan.redis.domain.user.dto.UpdateToken;
+import com.suwan.redis.domain.user.entity.Refresh;
 import com.suwan.redis.jwt.JwtUtil;
 import com.suwan.redis.repository.user.RefreshRepository;
 import com.suwan.redis.repository.user.UserRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
-import jakarta.persistence.LockModeType;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

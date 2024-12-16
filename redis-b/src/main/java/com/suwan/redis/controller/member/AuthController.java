@@ -1,7 +1,7 @@
 package com.suwan.redis.controller.member;
 
 import com.suwan.redis.common.Cookies;
-import com.suwan.redis.entitiy.user.dto.UpdateToken;
+import com.suwan.redis.domain.user.dto.UpdateToken;
 import com.suwan.redis.service.user.RefreshService;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.Cookie;
@@ -24,10 +24,10 @@ public class AuthController {
     try {
       UpdateToken newToken = refreshService.createNewToken(request);
 
-      Cookie refresh = cookies.createCookie("refreshToken", newToken.getNewRefreshToken());
+      Cookie refresh = cookies.createCookie("refreshToken", newToken.newRefreshToken());
 
       response.addCookie(refresh);
-      response.setHeader("Authorization", "Bearer " + newToken.getNewAccessToken());
+      response.setHeader("Authorization", "Bearer " + newToken.newAccessToken());
 
       return ResponseEntity.ok().build();
     } catch (JwtException e) {

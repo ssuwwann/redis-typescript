@@ -1,8 +1,8 @@
 package com.suwan.redis.service.user;
 
 import com.suwan.redis.common.Cookies;
-import com.suwan.redis.entitiy.user.User;
-import com.suwan.redis.entitiy.user.dto.CustomUserDetails;
+import com.suwan.redis.domain.user.entity.User;
+import com.suwan.redis.domain.user.dto.CustomUserDetails;
 import com.suwan.redis.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

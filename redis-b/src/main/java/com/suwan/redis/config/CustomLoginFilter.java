@@ -2,9 +2,9 @@ package com.suwan.redis.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.suwan.redis.common.Cookies;
-import com.suwan.redis.entitiy.user.dto.CustomUserDetails;
+import com.suwan.redis.domain.user.dto.CustomUserDetails;
 import com.suwan.redis.jwt.JwtUtil;
-import com.suwan.redis.entitiy.user.Refresh;
+import com.suwan.redis.domain.user.entity.Refresh;
 import com.suwan.redis.service.user.RefreshService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

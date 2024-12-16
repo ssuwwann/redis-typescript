@@ -1,6 +1,6 @@
 package com.suwan.redis.repository.file;
 
-import com.suwan.redis.entitiy.file.ProductFile;
+import com.suwan.redis.domain.file.ProductFile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

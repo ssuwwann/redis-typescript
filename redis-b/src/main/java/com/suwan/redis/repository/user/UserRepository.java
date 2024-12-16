@@ -1,6 +1,6 @@
 package com.suwan.redis.repository.user;
 
-import com.suwan.redis.entitiy.user.User;
+import com.suwan.redis.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

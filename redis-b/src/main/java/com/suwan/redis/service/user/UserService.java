@@ -1,10 +1,9 @@
 package com.suwan.redis.service.user;
 
-import com.suwan.redis.entitiy.cart.Cart;
-import com.suwan.redis.entitiy.user.Role;
-import com.suwan.redis.entitiy.user.User;
-import com.suwan.redis.entitiy.user.dto.CustomUserDetails;
-import com.suwan.redis.entitiy.user.dto.UserRequest;
+import com.suwan.redis.domain.cart.Cart;
+import com.suwan.redis.domain.user.entity.User;
+import com.suwan.redis.domain.user.dto.CustomUserDetails;
+import com.suwan.redis.domain.user.dto.UserRequest;
 import com.suwan.redis.repository.cart.CartRepository;
 import com.suwan.redis.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;

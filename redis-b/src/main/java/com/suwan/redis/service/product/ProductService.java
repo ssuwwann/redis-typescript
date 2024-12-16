@@ -1,13 +1,15 @@
 package com.suwan.redis.service.product;
 
-import com.suwan.redis.entitiy.category.Category;
-import com.suwan.redis.entitiy.file.ProductFile;
-import com.suwan.redis.entitiy.file.dto.FileInfomation;
-import com.suwan.redis.entitiy.file.dto.ProductFileCommand;
-import com.suwan.redis.entitiy.product.Product;
-import com.suwan.redis.entitiy.product.dto.ProductRequest;
-import com.suwan.redis.entitiy.user.User;
-import com.suwan.redis.entitiy.user.dto.CustomUserDetails;
+import com.suwan.redis.domain.category.Category;
+import com.suwan.redis.domain.file.ProductFile;
+import com.suwan.redis.domain.file.dto.FileInfomation;
+import com.suwan.redis.domain.file.dto.ProductFileCommand;
+import com.suwan.redis.domain.product.dto.ProductListResponse;
+import com.suwan.redis.domain.product.dto.ProductRequest;
+import com.suwan.redis.domain.product.entitiy.Product;
+import com.suwan.redis.domain.product.mapper.ProductMapper;
+import com.suwan.redis.domain.user.entity.User;
+import com.suwan.redis.domain.user.dto.CustomUserDetails;
 import com.suwan.redis.repository.category.CategoryRepository;
 import com.suwan.redis.repository.file.ProductFileRepository;
 import com.suwan.redis.repository.product.ProductRepository;
@@ -33,6 +35,7 @@ public class ProductService {
   private final CategoryRepository categoryRepository;
   private final ProductFileRepository productFileRepository;
   private final FileUpload fileUpload;
+  private final ProductMapper productMapper;
 
   public void saveProduct(Authentication authentication, ProductRequest request) throws IOException {
     CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
@@ -45,17 +48,17 @@ public class ProductService {
 
     Product product = Product.create(seller, request, categories);
     productRepository.save(product);
-    
+
     ProductFileCommand productFileCommand = handleProductImages(request);
 
-    if (productFileCommand.getDescriptionImage() != null) {
-      ProductFile descriptionImage = ProductFile.createDescriptionImage(product, productFileCommand.getDescriptionImage());
+    if (productFileCommand.descriptionImage() != null) {
+      ProductFile descriptionImage = ProductFile.createDescriptionImage(product, productFileCommand.descriptionImage());
       productFileRepository.save(descriptionImage);
     }
 
-    if (productFileCommand.getProductImages() != null) {
-      for (int i = 0; i < productFileCommand.getProductImages().size(); i++) {
-        ProductFile productImage = ProductFile.createProductImage(product, productFileCommand.getProductImages().get(i), i);
+    if (productFileCommand.productImages() != null) {
+      for (int i = 0; i < productFileCommand.productImages().size(); i++) {
+        ProductFile productImage = ProductFile.createProductImage(product, productFileCommand.productImages().get(i), i);
         productFileRepository.save(productImage);
       }
     }
@@ -84,4 +87,9 @@ public class ProductService {
     return new ProductFileCommand(descriptionImageInfo, productImagesInfo);
   }
 
+  @Transactional(readOnly = true)
+  public List<ProductListResponse> findAllProduct() {
+    List<Product> products = productRepository.findAll();
+    return productMapper.toListResponses(products);
+  }
 }
