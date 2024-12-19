@@ -32,13 +32,6 @@ public class ProductMapper {
     response.setSpecialPrice(product.getPriceInfo().isSpecialPrice());
     response.setDelivery(product.getPriceInfo().isFreeDelivery() ? "무료배송" : "");
 
-    String thumbnailPath = product.getProductImages().getImages().stream()
-            .filter(image -> image.getFileType() == FileType.PRODUCT_IMAGE)
-            .findFirst()
-            .map(ProductFile::getSavedPath)
-            .orElse("");
-    response.setThumbnailPath(thumbnailPath);
-
     return response;
   }
 

@@ -1,6 +1,6 @@
 import { privateApi, publicApi } from './axios.ts';
 import { AxiosResponse } from 'axios';
-import { ProductListData } from '../type/product.ts';
+import { ProductDetailData, ProductListData } from '../type/product.ts';
 
 export const saveProduct = async (formData: FormData): Promise<AxiosResponse> => {
   const response = await privateApi.post('/products', formData);
@@ -12,6 +12,14 @@ export const getProducts = async (): Promise<ProductListData[]> => {
   return response.data;
 };
 
-export const getThumbnail = async (): Promise<AxiosResponse> => {
+export const getThumbnail = async (productId: number): Promise<Blob> => {
+  const response = await publicApi.get(`/products/images/${productId}`, {
+    responseType: 'blob',
+  });
+  return response.data;
+};
 
+export const getProduct = async (id: number): Promise<ProductDetailData> => {
+  const response = await publicApi.get<ProductDetailData>(`/products/${id}`);
+  return response.data;
 };

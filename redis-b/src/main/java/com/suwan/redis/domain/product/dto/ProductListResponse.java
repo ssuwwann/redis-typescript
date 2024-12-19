@@ -13,5 +13,4 @@ public class ProductListResponse {
   private Double currentPrice;
   private boolean isSpecialPrice;
   private String delivery;
-  private String thumbnailPath;
 }

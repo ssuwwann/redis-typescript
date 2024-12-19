@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { ProductListData } from '../../type/product.ts';
+import { useEffect, useState } from 'react';
+import { getThumbnail } from '../../api/product.ts';
 
 const CardLink = styled(Link)`
     text-decoration: none;
@@ -90,12 +92,32 @@ interface MainListItemProps {
 }
 
 export default function MainListItem({ product }: MainListItemProps) {
+  const [thumbnailPath, setThumbnailPath] = useState<string>('');
+
+  const fetchThumbnail = async () => {
+    try {
+      const result = await getThumbnail(product.id);
+      setThumbnailPath(URL.createObjectURL(result));
+    } catch (error) {
+      console.error('Failed to fetching thumbnail image', error);
+    }
+
+  };
+
+  useEffect(() => {
+    fetchThumbnail();
+
+    return () => {
+      if (thumbnailPath) URL.revokeObjectURL(thumbnailPath);
+    };
+  }, []);
+
   return (
     <CardLink key={product.id} to={`/products/${product.id}`}>
       <TagContainer>
         {product.isSpecialPrice && <SpecialPrice>주말특가</SpecialPrice>}
       </TagContainer>
-      <ProductImage src={product.image} alt={product.title} />
+      <ProductImage src={thumbnailPath} alt={product.title} />
       <ProductTitle>{product.title}</ProductTitle>
       <PriceInfo>
         <DiscountContainer>
