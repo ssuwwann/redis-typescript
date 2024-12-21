@@ -13,13 +13,21 @@ export const getProducts = async (): Promise<ProductListData[]> => {
 };
 
 export const getThumbnail = async (productId: number): Promise<Blob> => {
-  const response = await publicApi.get(`/products/images/${productId}`, {
+  const response = await publicApi.get(`/products/images/thumbnail/${productId}`, {
     responseType: 'blob',
   });
   return response.data;
 };
 
-export const getProduct = async (id: number): Promise<ProductDetailData> => {
+export const getProduct = async (id: string | undefined): Promise<ProductDetailData> => {
   const response = await publicApi.get<ProductDetailData>(`/products/${id}`);
+  return response.data;
+};
+
+export const getImages = async (imageId: number): Promise<Blob> => {
+  const response = await publicApi.get(`/products/images/${imageId}`, {
+    responseType: 'blob',
+  });
+
   return response.data;
 };

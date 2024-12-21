@@ -2,9 +2,11 @@ package com.suwan.redis.util;
 
 import com.suwan.redis.domain.file.FileType;
 import com.suwan.redis.domain.file.ProductFile;
+import com.suwan.redis.repository.product.ProductRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -16,15 +18,19 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
-public class FileUpload {
+public class FileUtil {
 
+  private final ProductRepository productRepository;
   @Value("${file.upload.base-path}")
   private String basePath;
+
+  public FileUtil(ProductRepository productRepository) {
+    this.productRepository = productRepository;
+  }
 
   public String uploadFile(MultipartFile file) throws IOException {
     if (file == null || file.isEmpty()) return null;
@@ -58,27 +64,32 @@ public class FileUpload {
   }
 
   public ResponseEntity<Resource> getThubnail(List<ProductFile> productFiles) {
-    ProductFile productFile = productFiles.stream()
+    ProductFile thumbnail = productFiles.stream()
             .filter(pf -> pf.getFileType() == FileType.PRODUCT_IMAGE)
             .findFirst().orElseThrow();
-    Path path = Paths.get(basePath, productFile.getSavedPath());
+    Resource thumbnailResource = convertToResource(thumbnail);
 
-    Resource fileSystemResource = new FileSystemResource(path);
-
-    if (!fileSystemResource.exists()) return null;
-
-    try {
-      String contentType = Files.probeContentType(path);
-
-      return ResponseEntity.ok()
-              .contentType(MediaType.parseMediaType(contentType))
-              .body(fileSystemResource);
-    } catch (IOException e) {
-      e.printStackTrace();
-      return ResponseEntity.internalServerError().build();
-    }
+    return ResponseEntity.ok()
+            .contentType(MediaType.parseMediaType("image/" + thumbnail.getExtension()))
+            .body(thumbnailResource);
   }
 
+  public ResponseEntity<Resource> getImageResource(ProductFile productFiles) {
+    Resource resource = convertToResource(productFiles);
+
+    return ResponseEntity.ok()
+            .contentType(MediaType.parseMediaType("image/" + productFiles.getExtension()))
+            .body(resource);
+  }
+
+  private Resource convertToResource(ProductFile productFile) {
+    Path path = Paths.get(basePath, productFile.getSavedPath());
+    Resource resource = new FileSystemResource(path);
+
+    if (resource.exists()) return resource;
+
+    throw new RuntimeException("File not found");
+  }
 
   private String createDatePath() {
     LocalDateTime now = LocalDateTime.now();

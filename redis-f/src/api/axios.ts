@@ -1,6 +1,8 @@
 import axios from 'axios';
 
 const URL = import.meta.env.VITE_BASE_URL;
+let isRefreshing: boolean = false;
+
 export const publicApi = axios.create({
   baseURL: URL,
   withCredentials: true,
@@ -27,19 +29,23 @@ privateApi.interceptors.response.use(
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
+      if (isRefreshing) return;
+
       try {
+        isRefreshing = true;
         const response = await publicApi.post('/auth/refresh');
-        alert('리프레시 요청>> ' + response);
 
         const accessToken = response.headers['authorization'];
         localStorage.setItem('accessToken', accessToken);
 
         return privateApi(originalRequest);
       } catch (error) {
-        alert('새로 요청 토느 에러');
+        alert('새로 요청 토큰 에러');
         console.log('새로 요청 토큰 에러', error);
 
         return Promise.reject(error);
+      } finally {
+        isRefreshing = false;
       }
     }
     return Promise.reject(error);

@@ -36,4 +36,10 @@ public class Refresh extends BaseEntity {
             .build();
   }
 
+  public void update(Long userId, String refreshToken, String expiration) {
+    this.refreshToken = refreshToken;
+    this.expiration = expiration;
+    this.userId = userId;
+  }
+
 }

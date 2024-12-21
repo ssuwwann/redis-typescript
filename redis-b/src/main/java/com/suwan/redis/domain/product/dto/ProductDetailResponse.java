@@ -1,7 +1,7 @@
 package com.suwan.redis.domain.product.dto;
 
-import com.suwan.redis.domain.file.dto.ProductFileCommand;
 import com.suwan.redis.domain.product.entitiy.Product;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,8 +20,13 @@ public class ProductDetailResponse {
   private boolean freeDelivery;
   private Integer quantity;
   private List<String> categoryNames;
-  private ProductFileCommand productFile;
+  private ProductImagesId productImagesId;
   private Product.SellerResponse seller;
 
-
+  @Getter
+  @AllArgsConstructor
+  public static class ProductImagesId {
+    private Long descriptionImageId;
+    private List<Long> productImageIds;
+  }
 }

@@ -59,7 +59,7 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
     claims.put("email", email);
 
     String accessToken = jwtUtil.createToken("access", claims, 1000 * 60 * 5L);
-    String refreshToken = jwtUtil.createToken("refresh", claims, 1000 * 60 * 60 * 24L);
+    String refreshToken = jwtUtil.createToken("refresh", claims, 1000 * 60 * 60L);
 
     addRefreshEntity(id, refreshToken, 1000 * 60 * 60 * 24L);
 

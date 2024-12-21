@@ -115,7 +115,7 @@ export default function MainListItem({ product }: MainListItemProps) {
   return (
     <CardLink key={product.id} to={`/products/${product.id}`}>
       <TagContainer>
-        {product.isSpecialPrice && <SpecialPrice>주말특가</SpecialPrice>}
+        {product.specialPrice && <SpecialPrice>주말특가</SpecialPrice>}
       </TagContainer>
       <ProductImage src={thumbnailPath} alt={product.title} />
       <ProductTitle>{product.title}</ProductTitle>

@@ -2,8 +2,6 @@ package com.suwan.redis.domain.product.mapper;
 
 import com.suwan.redis.domain.file.FileType;
 import com.suwan.redis.domain.file.ProductFile;
-import com.suwan.redis.domain.file.dto.FileInfomation;
-import com.suwan.redis.domain.file.dto.ProductFileCommand;
 import com.suwan.redis.domain.product.dto.ProductDetailResponse;
 import com.suwan.redis.domain.product.dto.ProductListResponse;
 import com.suwan.redis.domain.product.entitiy.Product;
@@ -54,31 +52,25 @@ public class ProductMapper {
     // 이미지 매칭
     List<ProductFile> productFiles = product.getProductImages().getImages();
 
-    FileInfomation descriptionImage = productFiles.stream()
+    Long descriptionImage = productFiles.stream()
             .filter(file -> file.getFileType() == FileType.DESCRIPTION_IMAGE)
             .findFirst()
-            .map(this::convertToFileInfo)
+            .map(this::convertToFilePk)
             .orElse(null);
 
-    List<FileInfomation> productImages = productFiles.stream()
+    List<Long> productImages = productFiles.stream()
             .filter(file -> file.getFileType() == FileType.PRODUCT_IMAGE)
             .sorted(Comparator.comparing(ProductFile::getDisplayOrder))
-            .map(this::convertToFileInfo)
+            .map(this::convertToFilePk)
             .collect(Collectors.toList());
 
-    response.setProductFile(new ProductFileCommand(descriptionImage, productImages));
+    response.setProductImagesId(new ProductDetailResponse.ProductImagesId(descriptionImage, productImages));
 
     return response;
   }
 
-  private FileInfomation convertToFileInfo(ProductFile productFile) {
-    return FileInfomation.builder()
-            .originalFilename(productFile.getOriginalFilename())
-            .savedFilename(productFile.getSavedFilename())
-            .savedPath(productFile.getSavedPath())
-            .extension(productFile.getExtension())
-            .fileSize(productFile.getFileSize())
-            .build();
+  private Long convertToFilePk(ProductFile productFile) {
+    return productFile.getId();
   }
 
 }

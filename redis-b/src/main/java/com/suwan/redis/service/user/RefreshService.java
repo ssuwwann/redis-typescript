@@ -50,13 +50,13 @@ public class RefreshService {
 
     try {
       jwtUtil.isExpired(refreshToken);
+      deleteRefresh(refreshToken);
     } catch (ExpiredJwtException e) {
       throw new JwtException("Refresh token expired");
     }
 
     Refresh oldRefresh = refreshRepository.findByRefreshToken(refreshToken).orElseThrow(() -> new JwtException("Refresh token expired or reuse"));
     deleteRefresh(oldRefresh.getRefreshToken());
-    refreshRepository.flush();
 
     User user = userRepository.findByEmail(jwtUtil.getEmail(refreshToken)).orElseThrow();
 
@@ -64,10 +64,11 @@ public class RefreshService {
     claims.put("email", user.getEmail());
 
     String newAccessToken = jwtUtil.createToken("access", claims, 1000 * 60 * 5L);
-    String newRefreshToken = jwtUtil.createToken("refresh", claims, 1000 * 60 * 60 * 24L);
+    String newRefreshToken = jwtUtil.createToken("refresh", claims, 1000 * 60 * 60L);
 
     Refresh newRefresh = Refresh.create(user.getId(), newRefreshToken, new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24L).toString());
-    if (!refreshRepository.findByRefreshToken(newRefreshToken).isPresent()) refreshRepository.save(newRefresh);
+    oldRefresh.update(newRefresh.getUserId(), newRefresh.getRefreshToken(), newRefresh.getExpiration());
+    //if (!refreshRepository.findByRefreshToken(newRefreshToken).isPresent()) refreshRepository.saveAndFlush(newRefresh);
 
     return new UpdateToken(newAccessToken, newRefreshToken);
   }

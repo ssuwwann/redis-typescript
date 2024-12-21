@@ -46,12 +46,12 @@ public class Product extends BaseEntity {
   private List<ProductCategory> categories = new ArrayList<>();
 
   @Builder
+  @Getter
   public static class SellerResponse {
     private Long id;
     private String email;
     private String username;
   }
-
 
   public static Product create(User seller, ProductRequest request, List<Category> categories) {
     Product product = Product.builder()

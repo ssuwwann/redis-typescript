@@ -4,6 +4,7 @@ import com.suwan.redis.domain.category.Category;
 import com.suwan.redis.domain.file.ProductFile;
 import com.suwan.redis.domain.file.dto.FileInfomation;
 import com.suwan.redis.domain.file.dto.ProductFileCommand;
+import com.suwan.redis.domain.product.dto.ProductDetailResponse;
 import com.suwan.redis.domain.product.dto.ProductListResponse;
 import com.suwan.redis.domain.product.dto.ProductRequest;
 import com.suwan.redis.domain.product.entitiy.Product;
@@ -14,7 +15,7 @@ import com.suwan.redis.repository.category.CategoryRepository;
 import com.suwan.redis.repository.file.ProductFileRepository;
 import com.suwan.redis.repository.product.ProductRepository;
 import com.suwan.redis.repository.user.UserRepository;
-import com.suwan.redis.util.FileUpload;
+import com.suwan.redis.util.FileUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class ProductService {
   private final UserRepository userRepository;
   private final CategoryRepository categoryRepository;
   private final ProductFileRepository productFileRepository;
-  private final FileUpload fileUpload;
+  private final FileUtil fileUtil;
   private final ProductMapper productMapper;
 
   public void saveProduct(Authentication authentication, ProductRequest request) throws IOException {
@@ -70,13 +71,13 @@ public class ProductService {
     FileInfomation descriptionImageInfo = null;
 
     if (request.getDescriptionImage() != null) {
-      String savePath = fileUpload.uploadFile(request.getDescriptionImage());
+      String savePath = fileUtil.uploadFile(request.getDescriptionImage());
       descriptionImageInfo = FileInfomation.of(request.getDescriptionImage(), savePath);
     }
 
     List<FileInfomation> productImagesInfo = new ArrayList<>();
     if (request.getProductImages() != null) {
-      List<String> savedPaths = fileUpload.uploadFiles(request.getProductImages());
+      List<String> savedPaths = fileUtil.uploadFiles(request.getProductImages());
 
       for (int i = 0; i < savedPaths.size(); i++) {
         FileInfomation fileInfo = FileInfomation.of(request.getProductImages().get(i), savedPaths.get(i));
@@ -91,5 +92,13 @@ public class ProductService {
   public List<ProductListResponse> findAllProduct() {
     List<Product> products = productRepository.findAll();
     return productMapper.toListResponses(products);
+  }
+
+  @Transactional(readOnly = true)
+  public ProductDetailResponse findProductById(Long id) {
+    Product product = productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("없는 상품입니다."));
+    ProductMapper mapper = new ProductMapper();
+
+    return mapper.createDetailResponse(product);
   }
 }

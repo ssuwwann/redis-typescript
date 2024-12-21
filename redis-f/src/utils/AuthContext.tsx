@@ -33,7 +33,10 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    getUserRole();
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+      getUserRole();
+    }
   }, [username]);
 
   const setAuthState = (username: string, role: Role) => {
